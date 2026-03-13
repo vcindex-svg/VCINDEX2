@@ -6,6 +6,7 @@ import { createPageUrl } from "@/utils";
 
 import { Button } from "@/components/ui/button";
 import { Zap, Menu, X, LayoutDashboard, ShieldCheck, LogOut, Bookmark } from "lucide-react";
+import NeonCursor from "@/components/ui/NeonCursor";
 
 export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
@@ -24,6 +25,7 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen bg-background font-space">
+      <NeonCursor />
       {/* Nav */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/40"
         style={{ background: "rgba(8,7,16,0.85)", backdropFilter: "blur(20px)" }}>

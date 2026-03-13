@@ -106,10 +106,11 @@ export default function CreatorDashboard() {
     return () => { if (retryRef.current) clearInterval(retryRef.current); };
   }, []);
 
-  const isActive = profile?.subscription_status === "active";
-  const listingLimit = 1 + (profile?.extra_listings || 0);
+  const isAdmin = user?.role === 'admin';
+  const isActive = isAdmin || profile?.subscription_status === "active";
+  const listingLimit = isAdmin ? Infinity : 1 + (profile?.extra_listings || 0);
   const approvedTools = tools.filter((t) => t.status === "approved").length;
-  const canAddMore = tools.length < listingLimit;
+  const canAddMore = isAdmin || tools.length < listingLimit;
 
   const set = (key, val) => setForm((f) => ({ ...f, [key]: val }));
 
