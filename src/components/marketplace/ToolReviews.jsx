@@ -55,7 +55,7 @@ export default function ToolReviews({ toolId }) {
       if (isAuth) {
         const u = await db.auth.me();
         setUser(u);
-        if (revs.find((r) => r.created_by === u.email)) setSubmitted(true);
+        if (revs.find((r) => r.user_id === u.id)) setSubmitted(true);
       }
       setLoading(false);
     };

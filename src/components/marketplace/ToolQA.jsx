@@ -35,7 +35,7 @@ function QAItem({ qa, currentUser, toolCreator, onAnswer }) {
             <div className="mt-3 pl-3 border-l-2 border-emerald-500/40">
               <div className="flex items-center gap-1.5 mb-1">
                 <CheckCircle className="w-3 h-3 text-emerald-400" />
-                <span className="text-[11px] text-emerald-400 font-mono">Answered by @{qa.answered_by?.split("@")[0]}</span>
+                <span className="text-[11px] text-emerald-400 font-mono">Answered by creator</span>
               </div>
               <p className="text-sm text-foreground/80">{qa.answer}</p>
             </div>
@@ -114,7 +114,7 @@ export default function ToolQA({ toolId, toolCreator }) {
   const handleAnswer = async (qaId, answerText) => {
     const updated = await db.entities.ToolQA.update(qaId, {
       answer: answerText,
-      answered_by: currentUser?.email,
+      answered_by: currentUser?.id,
     });
     setQuestions((prev) => prev.map((q) => q.id === qaId ? updated : q));
   };

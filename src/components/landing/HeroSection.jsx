@@ -1,8 +1,19 @@
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { createPageUrl } from "@/utils";
 import { ArrowRight, Zap } from "lucide-react";
 
 export default function HeroSection() {
+  const [toolCount, setToolCount] = useState(null);
+  const [creatorCount, setCreatorCount] = useState(null);
+
+  useEffect(() => {
+    supabase.from('tools').select('*', { count: 'exact', head: true }).eq('status', 'approved')
+      .then(({ count }) => setToolCount(count ?? 0));
+    supabase.from('creator_profiles').select('*', { count: 'exact', head: true })
+      .then(({ count }) => setCreatorCount(count ?? 0));
+  }, []);
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center text-center px-4 overflow-hidden">
       {/* Glow orbs */}
@@ -46,9 +57,9 @@ export default function HeroSection() {
         {/* Stats */}
         <div className="flex items-center justify-center gap-8 mt-16 flex-wrap">
           {[
-            { label: "Tools Listed", value: "500+" },
+            { label: "Tools Listed", value: toolCount !== null ? toolCount.toLocaleString() : "…" },
             { label: "Categories", value: "10" },
-            { label: "Vibe Coders", value: "120+" },
+            { label: "Vibe Coders", value: creatorCount !== null ? creatorCount.toLocaleString() : "…" },
           ].map((s) => (
             <div key={s.label} className="text-center">
               <div className="text-2xl font-bold gradient-text">{s.value}</div>

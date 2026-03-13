@@ -44,7 +44,7 @@ export default function CreatorSignup() {
       if (!isAuth) { setLoading(false); return; }
       const u = await db.auth.me();
       setUser(u);
-      const profiles = await db.entities.CreatorProfile.filter({ created_by: u.email });
+      const profiles = await db.entities.CreatorProfile.filter({ user_id: u.id });
       if (profiles.length > 0) setProfile(profiles[0]);
       setLoading(false);
     };

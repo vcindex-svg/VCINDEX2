@@ -1,4 +1,5 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { supabase } from "@/lib/supabase";
 import * as THREE from "three";
 import { createPageUrl } from "@/utils";
 import { ArrowRight, Zap } from "lucide-react";
@@ -8,6 +9,15 @@ import SquishyButton from "@/components/ui/SquishyButton";
 
 export default function HeroSection3D() {
   const mountRef = useRef(null);
+  const [toolCount, setToolCount] = useState(0);
+  const [creatorCount, setCreatorCount] = useState(0);
+
+  useEffect(() => {
+    supabase.from('tools').select('*', { count: 'exact', head: true }).eq('status', 'approved')
+      .then(({ count }) => setToolCount(count ?? 0));
+    supabase.from('creator_profiles').select('*', { count: 'exact', head: true })
+      .then(({ count }) => setCreatorCount(count ?? 0));
+  }, []);
 
   useEffect(() => {
     const el = mountRef.current;
@@ -219,9 +229,9 @@ export default function HeroSection3D() {
         {/* Stats */}
         <div className="flex items-center justify-center gap-8 mt-16 flex-wrap">
           {[
-            { label: "Tools Listed",  to: 500,  suffix: "+" },
-            { label: "Categories",    to: 10,   suffix: ""  },
-            { label: "Vibe Coders",   to: 120,  suffix: "+" },
+            { label: "Tools Listed", to: toolCount,    suffix: "" },
+            { label: "Categories",   to: 10,           suffix: "" },
+            { label: "Vibe Coders",  to: creatorCount, suffix: "" },
           ].map((s) => (
             <div key={s.label} className="text-center">
               <div className="text-2xl font-bold gradient-text">

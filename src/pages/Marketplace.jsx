@@ -78,9 +78,8 @@ export default function Marketplace() {
           db.entities.Upvote.filter({}, "-created_date", 500),
           db.entities.SavedTool.list("-created_date", 500),
         ]);
-        const me = await db.auth.me();
-        setUserUpvotedIds(upvotes.filter((u) => u.created_by === me.email).map((u) => u.tool_id));
-        setSavedToolIds(savedItems.filter((s) => s.created_by === me.email).map((s) => s.tool_id));
+        setUserUpvotedIds(upvotes.map((u) => u.tool_id));
+        setSavedToolIds(savedItems.map((s) => s.tool_id));
       }
     };
     init();
@@ -115,7 +114,7 @@ export default function Marketplace() {
       })
       .sort((a, b) => {
         if (search) return b.score - a.score;
-        if (sortBy === "newest") return new Date(b.tool.created_date) - new Date(a.tool.created_date);
+        if (sortBy === "newest") return new Date(b.tool.created_at) - new Date(a.tool.created_at);
         if (sortBy === "popular") return (b.tool.views || 0) - (a.tool.views || 0);
         if (sortBy === "upvoted") return (b.tool.upvotes || 0) - (a.tool.upvotes || 0);
         return 0;

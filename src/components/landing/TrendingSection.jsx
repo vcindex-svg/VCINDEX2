@@ -9,7 +9,7 @@ import { createPageUrl } from "@/utils";
 // Calculate trending score — upvotes weighted heavily, views secondary, recency bonus
 function trendScore(tool) {
   const now = Date.now();
-  const created = new Date(tool.created_date).getTime();
+  const created = new Date(tool.created_at).getTime();
   const ageMs = now - created;
   const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
   const recencyBonus = ageMs < sevenDaysMs ? 1.6 : 1;
@@ -55,7 +55,7 @@ export default function TrendingSection({ onToolClick }) {
           {trending.map((tool, i) => {
             const score = trendScore(tool);
             const pct = maxScore > 0 ? Math.round((score / maxScore) * 100) : 0;
-            const isNew = Date.now() - new Date(tool.created_date).getTime() < 7 * 24 * 60 * 60 * 1000;
+            const isNew = Date.now() - new Date(tool.created_at).getTime() < 7 * 24 * 60 * 60 * 1000;
             return (
               <button
                 key={tool.id}

@@ -35,8 +35,8 @@ export default function CreatorMetrics({ tools, savedTools = [], upvoteHistory =
     return days.map((day) => {
       const label = format(day, "MMM d");
       const dayStr = format(day, "yyyy-MM-dd");
-      const upvotes = upvoteHistory.filter((u) => u.created_date?.startsWith(dayStr)).length;
-      const bookmarks = savedTools.filter((s) => s.created_date?.startsWith(dayStr)).length;
+      const upvotes = upvoteHistory.filter((u) => u.created_at?.startsWith(dayStr)).length;
+      const bookmarks = savedTools.filter((s) => s.created_at?.startsWith(dayStr)).length;
       return { label, Upvotes: upvotes, Bookmarks: bookmarks };
     });
   }, [upvoteHistory, savedTools]);

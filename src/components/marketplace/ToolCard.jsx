@@ -22,7 +22,7 @@ const CATEGORY_COLORS = {
 // Trending score helper (same formula as TrendingSection)
 function trendScore(tool) {
   const now = Date.now();
-  const created = new Date(tool.created_date).getTime();
+  const created = new Date(tool.created_at).getTime();
   const ageMs = now - created;
   const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
   const recencyBonus = ageMs < sevenDaysMs ? 1.6 : 1;

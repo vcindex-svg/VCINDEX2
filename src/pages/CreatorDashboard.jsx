@@ -1,6 +1,7 @@
 import db from '@/api/base44Client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import ParticleBackground from "@/components/ui/ParticleBackground";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Plus, Loader2, CheckCircle, Clock, XCircle, Zap, Edit, Trash2, AlertCircle, BarChart2, Upload, X } from "lucide-react";
+import { Plus, Loader2, CheckCircle, Clock, XCircle, Zap, Edit, Trash2, AlertCircle, BarChart2, Upload, X, PartyPopper } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import CreatorMetrics from "@/components/dashboard/CreatorMetrics";
 import { createPageUrl } from "@/utils";
@@ -40,6 +41,20 @@ export default function CreatorDashboard() {
   const [tagInput, setTagInput] = useState("");
   const [savedTools, setSavedTools] = useState([]);
   const [upvoteHistory, setUpvoteHistory] = useState([]);
+  const [paymentBanner, setPaymentBanner] = useState(null); // 'processing' | 'success' | 'cancelled'
+  const retryRef = useRef(null);
+  const [searchParams] = useSearchParams();
+
+  const fetchProfile = async (userId) => {
+    const profiles = await db.entities.CreatorProfile.filter({ user_id: userId });
+    return profiles[0] ?? null;
+  };
+
+  useEffect(() => {
+    const payment = searchParams.get("payment");
+    if (payment === "success") setPaymentBanner("processing");
+    if (payment === "cancelled") setPaymentBanner("cancelled");
+  }, []);
 
   useEffect(() => {
     const init = async () => {
@@ -47,25 +62,48 @@ export default function CreatorDashboard() {
       if (!isAuth) { db.auth.redirectToLogin(window.location.href); return; }
       const u = await db.auth.me();
       setUser(u);
-      const [profiles, myTools] = await Promise.all([
-        db.entities.CreatorProfile.filter({ user_id: u.id }),
-        db.entities.Tool.filter({ created_by: u.email }, "-created_date"),
+      const [p, myTools] = await Promise.all([
+        fetchProfile(u.id),
+        db.entities.Tool.filter({ created_by: u.email }, "-created_at"),
       ]);
-      if (profiles[0]) setProfile(profiles[0]);
+      if (p) {
+        setProfile(p);
+        if (paymentBanner === "processing" && p.subscription_status === "active") {
+          setPaymentBanner("success");
+        }
+      }
       setTools(myTools);
       setLoading(false);
+
+      // If came from payment success but subscription not active yet, retry up to 8x (webhook delay)
+      if (searchParams.get("payment") === "success" && p?.subscription_status !== "active") {
+        let attempts = 0;
+        retryRef.current = setInterval(async () => {
+          attempts++;
+          const fresh = await fetchProfile(u.id);
+          if (fresh?.subscription_status === "active") {
+            setProfile(fresh);
+            setPaymentBanner("success");
+            clearInterval(retryRef.current);
+          } else if (attempts >= 8) {
+            clearInterval(retryRef.current);
+            setPaymentBanner("delayed");
+          }
+        }, 3000);
+      }
       // Fetch engagement data for analytics (non-blocking)
       if (myTools.length > 0) {
         const toolIds = myTools.map((t) => t.id);
         const [savedList, upvoteList] = await Promise.all([
-          db.entities.SavedTool.list("-created_date", 500),
-          db.entities.Upvote.list("-created_date", 500),
+          db.entities.SavedTool.list("-created_at", 500),
+          db.entities.Upvote.list("-created_at", 500),
         ]);
         setSavedTools(savedList.filter((s) => toolIds.includes(s.tool_id)));
         setUpvoteHistory(upvoteList.filter((u2) => toolIds.includes(u2.tool_id)));
       }
     };
     init();
+    return () => { if (retryRef.current) clearInterval(retryRef.current); };
   }, []);
 
   const isActive = profile?.subscription_status === "active";
@@ -136,6 +174,45 @@ export default function CreatorDashboard() {
     <div className="relative min-h-screen font-space">
       <ParticleBackground />
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-10">
+
+        {/* Payment feedback banners */}
+        {paymentBanner === "processing" && (
+          <div className="mb-6 rounded-xl border border-violet-500/30 bg-violet-500/10 px-5 py-4 flex items-center gap-3">
+            <Loader2 className="w-5 h-5 text-violet-400 animate-spin flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-violet-300">Payment received — activating your subscription…</p>
+              <p className="text-xs text-muted-foreground mt-0.5">This usually takes a few seconds. Please wait.</p>
+            </div>
+          </div>
+        )}
+        {paymentBanner === "success" && (
+          <div className="mb-6 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-5 py-4 flex items-center gap-3">
+            <PartyPopper className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-emerald-300">🎉 Subscription activated! You're now a Creator.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Start adding your tools below.</p>
+            </div>
+            <button onClick={() => setPaymentBanner(null)} className="ml-auto text-muted-foreground hover:text-foreground"><X className="w-4 h-4" /></button>
+          </div>
+        )}
+        {paymentBanner === "delayed" && (
+          <div className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 px-5 py-4 flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-semibold text-amber-300">Payment succeeded but activation is taking longer than usual.</p>
+              <p className="text-xs text-muted-foreground mt-0.5">Try refreshing in 30 seconds. If it persists, contact support with your Stripe receipt.</p>
+            </div>
+            <button onClick={() => window.location.reload()} className="ml-auto text-xs text-amber-400 underline">Refresh</button>
+          </div>
+        )}
+        {paymentBanner === "cancelled" && (
+          <div className="mb-6 rounded-xl border border-red-500/30 bg-red-500/10 px-5 py-4 flex items-center gap-3">
+            <XCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+            <p className="text-sm text-red-300">Payment was cancelled. No charge was made.</p>
+            <button onClick={() => setPaymentBanner(null)} className="ml-auto text-muted-foreground hover:text-foreground"><X className="w-4 h-4" /></button>
+          </div>
+        )}
+
         <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Creator Dashboard</h1>
