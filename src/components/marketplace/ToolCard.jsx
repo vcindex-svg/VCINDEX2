@@ -3,7 +3,7 @@ import db from '@/api/base44Client';
 import { useState, useEffect } from "react";
 
 import { Badge } from "@/components/ui/badge";
-import { Zap, Tag, Clock, ChevronUp, Star, Bookmark, TrendingUp } from "lucide-react";
+import { Zap, Tag, Clock, ChevronUp, Star, Bookmark, TrendingUp, Shield } from "lucide-react";
 import TiltCard from "@/components/ui/TiltCard";
 
 const CATEGORY_COLORS = {
@@ -17,6 +17,7 @@ const CATEGORY_COLORS = {
   "automation":    { bg: "bg-purple-500/10",  border: "border-purple-500/30", text: "text-purple-400" },
   "communication": { bg: "bg-yellow-500/10",  border: "border-yellow-500/30", text: "text-yellow-400" },
   "security":      { bg: "bg-red-500/10",     border: "border-red-500/30",    text: "text-red-400" },
+  "media":         { bg: "bg-rose-500/10",    border: "border-rose-500/30",   text: "text-rose-400" },
 };
 
 // Trending score helper (same formula as TrendingSection)
@@ -36,6 +37,7 @@ export default function ToolCard({ tool, onClick, userUpvotedIds = [], onUpvote,
   const [saved, setSaved] = useState(savedToolIds.includes(tool.id));
   const [savingInProgress, setSavingInProgress] = useState(false);
   const isTrending = trendScore(tool) > 10;
+  const isStaffPick = tool.tags?.includes('staff-pick');
 
   useEffect(() => {
     setUpvoted(userUpvotedIds.includes(tool.id));
@@ -95,6 +97,11 @@ export default function ToolCard({ tool, onClick, userUpvotedIds = [], onUpvote,
           {isTrending && !tool.featured && (
             <Badge className="bg-orange-500/20 border-orange-500/30 text-orange-400 border text-[10px] font-mono uppercase tracking-wider">
               <TrendingUp className="w-2.5 h-2.5 mr-1" /> Hot
+            </Badge>
+          )}
+          {isStaffPick && (
+            <Badge className="bg-cyan-500/15 border-cyan-500/40 text-cyan-300 border text-[10px] font-mono uppercase tracking-wider">
+              <Shield className="w-2.5 h-2.5 mr-1" /> Staff Pick
             </Badge>
           )}
         </div>

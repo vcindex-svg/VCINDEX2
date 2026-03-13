@@ -9,7 +9,8 @@ const CATEGORIES = [
   { id: "finance",       label: "Finance",        emoji: "💰" },
   { id: "education",     label: "Education",      emoji: "📚" },
   { id: "communication", label: "Comms",          emoji: "💬" },
-  { id: "security",      label: "Security",       emoji: "🛡️" },
+  { id: "security",      label: "Security",      emoji: "🛡️" },
+  { id: "media",         label: "Media",         emoji: "🎵" },
 ];
 
 // selected = string[] of category ids (empty = all)
