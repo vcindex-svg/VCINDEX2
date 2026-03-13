@@ -1,0 +1,111 @@
+{
+  "name": "Tool",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "tagline": {
+      "type": "string",
+      "description": "Short one-liner"
+    },
+    "description": {
+      "type": "string"
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "link": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "productivity",
+        "ai-ml",
+        "dev-tools",
+        "design",
+        "marketing",
+        "finance",
+        "education",
+        "automation",
+        "communication",
+        "security"
+      ]
+    },
+    "subcategory": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pricing_model": {
+      "type": "string",
+      "enum": [
+        "free",
+        "freemium",
+        "one-time",
+        "subscription",
+        "open-source"
+      ],
+      "default": "free"
+    },
+    "price": {
+      "type": "number"
+    },
+    "has_discount": {
+      "type": "boolean",
+      "default": false
+    },
+    "discount_percentage": {
+      "type": "number"
+    },
+    "original_price": {
+      "type": "number"
+    },
+    "has_free_trial": {
+      "type": "boolean",
+      "default": false
+    },
+    "free_trial_days": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "views": {
+      "type": "number",
+      "default": 0
+    },
+    "upvotes": {
+      "type": "number",
+      "default": 0
+    },
+    "avg_rating": {
+      "type": "number",
+      "default": 0
+    },
+    "review_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "name",
+    "link",
+    "category"
+  ]
+}

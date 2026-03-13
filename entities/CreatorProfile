@@ -1,0 +1,51 @@
+{
+  "name": "CreatorProfile",
+  "type": "object",
+  "properties": {
+    "bio": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
+    },
+    "avatar_url": {
+      "type": "string"
+    },
+    "twitter": {
+      "type": "string"
+    },
+    "github": {
+      "type": "string"
+    },
+    "subscription_plan": {
+      "type": "string",
+      "enum": [
+        "monthly",
+        "annual"
+      ]
+    },
+    "subscription_status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "cancelled",
+        "expired"
+      ],
+      "default": "inactive"
+    },
+    "subscription_start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "subscription_end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "extra_listings": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": []
+}

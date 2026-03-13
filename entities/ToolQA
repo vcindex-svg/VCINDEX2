@@ -1,0 +1,26 @@
+{
+  "name": "ToolQA",
+  "type": "object",
+  "properties": {
+    "tool_id": {
+      "type": "string",
+      "description": "ID of the tool this Q&A belongs to"
+    },
+    "question": {
+      "type": "string",
+      "description": "The question asked by the user"
+    },
+    "answer": {
+      "type": "string",
+      "description": "The answer provided by the creator or community"
+    },
+    "answered_by": {
+      "type": "string",
+      "description": "Email of who answered"
+    }
+  },
+  "required": [
+    "tool_id",
+    "question"
+  ]
+}

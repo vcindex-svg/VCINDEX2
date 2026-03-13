@@ -1,0 +1,25 @@
+tool_id
+(
+text
+, required
+)
+ID of the tool this Q&A belongs to
+
+question
+(
+text
+, required
+)
+The question asked by the user
+
+answer
+(
+text
+)
+The answer provided by the creator or community
+
+answered_by
+(
+text
+)
+Email of who answered

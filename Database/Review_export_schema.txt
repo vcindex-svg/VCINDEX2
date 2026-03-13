@@ -1,0 +1,17 @@
+tool_id
+(
+text
+, required
+)
+rating
+(
+number
+, required
+)
+Additional Properties:
+minimum: 1
+maximum: 5
+feedback
+(
+text
+)

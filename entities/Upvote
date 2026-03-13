@@ -1,0 +1,13 @@
+{
+  "name": "Upvote",
+  "type": "object",
+  "properties": {
+    "tool_id": {
+      "type": "string",
+      "description": "The ID of the tool that was upvoted"
+    }
+  },
+  "required": [
+    "tool_id"
+  ]
+}

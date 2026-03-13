@@ -1,0 +1,19 @@
+name
+(
+text
+, required
+)
+Collection name e.g. 'AI Tools for Devs'
+
+description
+(
+text
+)
+color
+(
+text
+)
+Accent color for the collection
+
+Default: "violet"
+Options: violet, cyan, pink, emerald, amber, blue

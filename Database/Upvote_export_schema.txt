@@ -1,0 +1,6 @@
+tool_id
+(
+text
+, required
+)
+The ID of the tool that was upvoted

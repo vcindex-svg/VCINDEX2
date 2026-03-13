@@ -1,0 +1,12 @@
+tool_id
+(
+text
+, required
+)
+ID of the bookmarked tool
+
+collection_id
+(
+text
+)
+ID of the collection this saved tool belongs to (optional)

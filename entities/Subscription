@@ -1,0 +1,41 @@
+{
+  "name": "Subscription",
+  "type": "object",
+  "properties": {
+    "plan": {
+      "type": "string",
+      "enum": [
+        "monthly",
+        "annual"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "cancelled",
+        "expired",
+        "pending"
+      ],
+      "default": "pending"
+    },
+    "amount_paid": {
+      "type": "number"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "payment_reference": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": []
+}

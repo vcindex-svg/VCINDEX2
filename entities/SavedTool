@@ -1,0 +1,17 @@
+{
+  "name": "SavedTool",
+  "type": "object",
+  "properties": {
+    "tool_id": {
+      "type": "string",
+      "description": "ID of the bookmarked tool"
+    },
+    "collection_id": {
+      "type": "string",
+      "description": "ID of the collection this saved tool belongs to (optional)"
+    }
+  },
+  "required": [
+    "tool_id"
+  ]
+}

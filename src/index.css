@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 15% 4%;
+    --foreground: 210 30% 95%;
+
+    --surface: 240 12% 7%;
+    --surface-2: 240 10% 10%;
+
+    --card: 240 12% 7%;
+    --card-foreground: 210 30% 95%;
+
+    --popover: 240 12% 8%;
+    --popover-foreground: 210 30% 95%;
+
+    --primary: 263 70% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 192 80% 45%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 286 60% 68%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 240 10% 12%;
+    --muted-foreground: 215 15% 50%;
+
+    --border: 240 12% 16%;
+    --input: 240 10% 14%;
+    --ring: 263 70% 60%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --radius: 0.75rem;
+
+    --font-space: 'Space Grotesk', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-space);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 58, 237, 0.12), transparent),
+      radial-gradient(ellipse 60% 40% at 85% 85%, rgba(6, 182, 212, 0.07), transparent),
+      radial-gradient(ellipse 50% 30% at 10% 60%, rgba(167, 139, 250, 0.05), transparent);
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    background: linear-gradient(135deg, #a78bfa, #38bdf8, #f0abfc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-purple {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.4), 0 0 60px rgba(124, 58, 237, 0.15);
+  }
+
+  .glow-cyan {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.4), 0 0 60px rgba(6, 182, 212, 0.15);
+  }
+
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+  .card-hover:hover {
+    border-color: rgba(124, 58, 237, 0.4);
+    box-shadow: 0 0 30px rgba(124, 58, 237, 0.15), 0 8px 32px rgba(0,0,0,0.4);
+    transform: translateY(-2px);
+  }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(124, 58, 237, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(124, 58, 237, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .animated-border-wrap {
+    background: linear-gradient(135deg, #7c3aed, #06b6d4, #f0abfc, #7c3aed);
+    background-size: 300% 300%;
+    animation: borderSpin 4s linear infinite;
+    padding: 1px;
+    border-radius: 12px;
+  }
+
+  .glass {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+}
+
+@keyframes borderSpin {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.05); }
+}
+
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.float-anim { animation: floatY 4s ease-in-out infinite; }
+.pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: hsl(var(--background)); }
+::-webkit-scrollbar-thumb { background: hsl(var(--primary) / 0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.5); }

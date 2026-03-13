@@ -1,0 +1,31 @@
+plan
+(
+text
+)
+Options: monthly, annual
+status
+(
+text
+)
+Default: "pending"
+Options: active, cancelled, expired, pending
+amount_paid
+(
+number
+)
+start_date
+(
+date
+)
+end_date
+(
+date
+)
+payment_reference
+(
+text
+)
+notes
+(
+text
+)

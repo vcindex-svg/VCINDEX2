@@ -1,0 +1,101 @@
+name
+(
+text
+, required
+)
+tagline
+(
+text
+)
+Short one-liner
+
+description
+(
+text
+)
+image_url
+(
+text
+)
+link
+(
+text
+, required
+)
+category
+(
+text
+, required
+)
+Options: productivity, ai-ml, dev-tools, design, marketing, finance, education, automation, communication, security
+subcategory
+(
+text
+)
+tags
+(
+array
+)
+pricing_model
+(
+text
+)
+Default: "free"
+Options: free, freemium, one-time, subscription, open-source
+price
+(
+number
+)
+has_discount
+(
+boolean
+)
+Default: false
+discount_percentage
+(
+number
+)
+original_price
+(
+number
+)
+has_free_trial
+(
+boolean
+)
+Default: false
+free_trial_days
+(
+number
+)
+status
+(
+text
+)
+Default: "pending"
+Options: pending, approved, rejected
+featured
+(
+boolean
+)
+Default: false
+views
+(
+number
+)
+Default: 0
+upvotes
+(
+number
+)
+Default: 0
+avg_rating
+(
+number
+)
+Default: 0
+review_count
+(
+number
+)
+Default: 0

@@ -1,0 +1,44 @@
+bio
+(
+text
+)
+website
+(
+text
+)
+avatar_url
+(
+text
+)
+twitter
+(
+text
+)
+github
+(
+text
+)
+subscription_plan
+(
+text
+)
+Options: monthly, annual
+subscription_status
+(
+text
+)
+Default: "inactive"
+Options: active, inactive, cancelled, expired
+subscription_start_date
+(
+date
+)
+subscription_end_date
+(
+date
+)
+extra_listings
+(
+number
+)
+Default: 0
