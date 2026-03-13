@@ -49,7 +49,7 @@ export default async function handler(req, res) {
       // ── Payment succeeded: activate subscription ──────────────────────────
       case 'checkout.session.completed': {
         const session = event.data.object;
-        const { userId, plan } = session.metadata ?? {};
+        const { userId, userEmail, plan } = session.metadata ?? {};
 
         if (!userId) {
           console.error('[webhook] checkout.session.completed: missing userId in metadata');
@@ -66,6 +66,7 @@ export default async function handler(req, res) {
           .upsert(
             {
               user_id: userId,
+              created_by: userEmail,
               subscription_plan: plan,
               subscription_status: 'active',
               subscription_start_date: now.toISOString().split('T')[0],

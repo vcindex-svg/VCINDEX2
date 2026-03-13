@@ -48,7 +48,7 @@ export default function CreatorDashboard() {
       const u = await db.auth.me();
       setUser(u);
       const [profiles, myTools] = await Promise.all([
-        db.entities.CreatorProfile.filter({ created_by: u.email }),
+        db.entities.CreatorProfile.filter({ user_id: u.id }),
         db.entities.Tool.filter({ created_by: u.email }, "-created_date"),
       ]);
       if (profiles[0]) setProfile(profiles[0]);

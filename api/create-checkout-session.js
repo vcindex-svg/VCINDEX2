@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       payment_method_types: ['card'],
       line_items: [{ price: PRICES[plan], quantity: 1 }],
       customer_email: userEmail,
-      metadata: { userId, plan },
+      metadata: { userId, userEmail, plan },
       success_url: `${process.env.VITE_APP_URL}/CreatorDashboard?payment=success`,
       cancel_url:  `${process.env.VITE_APP_URL}/CreatorSignup?payment=cancelled`,
     });
