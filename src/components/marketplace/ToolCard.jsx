@@ -117,12 +117,13 @@ export default function ToolCard({ tool, onClick, userUpvotedIds = [], onUpvote,
         <div className="relative overflow-hidden" style={{ aspectRatio: "16/9" }}>
           {tool.image_url ? (
             <img src={tool.image_url} alt={tool.name}
+              onError={(e) => { e.target.style.display = 'none'; e.target.nextElementSibling.style.display = 'flex'; }}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-violet-900/40 to-cyan-900/20 flex items-center justify-center">
-              <span className="text-4xl font-mono font-bold text-primary/30 select-none">{tool.name?.[0]}</span>
-            </div>
-          )}
+          ) : null}
+          <div className="w-full h-full bg-gradient-to-br from-violet-900/40 to-cyan-900/20 items-center justify-center"
+            style={{ display: tool.image_url ? 'none' : 'flex' }}>
+            <span className="text-4xl font-mono font-bold text-primary/30 select-none">{tool.name?.[0]}</span>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-card/80 to-transparent" />
         </div>
 
