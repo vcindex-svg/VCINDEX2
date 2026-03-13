@@ -38,8 +38,27 @@ export default function ParticleBackground() {
     );
     camera.position.z = 5;
 
+    // ── Sprite textures (circles, not squares) ────────────────────────────
+    function makeSpriteTex(size, sharpness) {
+      // sharpness 0 = very soft Gaussian blob; 1 = crisp dot
+      const c  = document.createElement("canvas");
+      c.width  = size;
+      c.height = size;
+      const ctx = c.getContext("2d");
+      const cx  = size / 2;
+      const g   = ctx.createRadialGradient(cx, cx, 0, cx, cx, cx);
+      g.addColorStop(0,          "rgba(255,255,255,1)");
+      g.addColorStop(sharpness,  "rgba(255,255,255,0.6)");
+      g.addColorStop(1,          "rgba(255,255,255,0)");
+      ctx.fillStyle = g;
+      ctx.fillRect(0, 0, size, size);
+      return new THREE.CanvasTexture(c);
+    }
+    const starTex   = makeSpriteTex(32, 0.35);  // crisp stars
+    const nebulaTex = makeSpriteTex(64, 0.05);  // very soft blobs
+
     // ── Helper: build a Points layer ─────────────────────────────────────
-    function makePoints({ count, rMin, rMax, sizeMin, sizeMax, opacity, blending, colorFn }) {
+    function makePoints({ count, rMin, rMax, sizeMin, sizeMax, opacity, blending, colorFn, texture }) {
       const positions = new Float32Array(count * 3);
       const colors    = new Float32Array(count * 3);
 
@@ -64,8 +83,10 @@ export default function ParticleBackground() {
 
       const mat = new THREE.PointsMaterial({
         size: sizeMin + Math.random() * (sizeMax - sizeMin),
+        map: texture ?? starTex,
         vertexColors: true,
         transparent: true,
+        alphaTest: 0.001,
         opacity,
         sizeAttenuation: true,
         blending: blending ?? THREE.NormalBlending,
@@ -82,6 +103,7 @@ export default function ParticleBackground() {
       sizeMin: 1.8, sizeMax: 3.0,
       opacity: 0.18,
       blending: THREE.AdditiveBlending,
+      texture: nebulaTex,
       colorFn: (t) =>
         t < 0.45
           ? [0.42, 0.08, 0.85]   // deep violet
@@ -128,6 +150,7 @@ export default function ParticleBackground() {
       sizeMin: 0.5, sizeMax: 1.2,
       opacity: 0.07,
       blending: THREE.AdditiveBlending,
+      texture: nebulaTex,
       colorFn: (t) =>
         t < 0.5
           ? [0.20, 0.05, 1.00]   // indigo glow
@@ -176,6 +199,8 @@ export default function ParticleBackground() {
       cancelAnimationFrame(animId);
       window.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("resize", onResize);
+      starTex.dispose();
+      nebulaTex.dispose();
       renderer.dispose();
       if (mount.contains(renderer.domElement)) {
         mount.removeChild(renderer.domElement);
