@@ -48,6 +48,8 @@ create table if not exists public.creator_profiles (
   subscription_start_date date,
   subscription_end_date   date,
   extra_listings          integer default 0,
+  stripe_customer_id      text,
+  stripe_subscription_id  text,
   created_at              timestamptz default now()
 );
 
