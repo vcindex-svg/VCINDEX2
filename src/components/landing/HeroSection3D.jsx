@@ -30,8 +30,9 @@ export default function HeroSection3D() {
     const camera = new THREE.PerspectiveCamera(60, W / H, 0.1, 100);
     camera.position.z = 5.5;
 
-    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const isMobile = window.matchMedia("(pointer: coarse)").matches;
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1 : 2));
     renderer.setSize(W, H);
     renderer.setClearColor(0x000000, 0);
     el.appendChild(renderer.domElement);
@@ -130,13 +131,19 @@ export default function HeroSection3D() {
     });
     scene.add(new THREE.Points(ambGeo, ambMat));
 
-    // Mouse parallax
+    // Mouse / touch parallax
     const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
     const onMouseMove = (e) => {
       mouse.tx = (e.clientX / window.innerWidth - 0.5) * 0.8;
       mouse.ty = -(e.clientY / window.innerHeight - 0.5) * 0.5;
     };
+    const onTouchMove = (e) => {
+      const t = e.touches[0];
+      mouse.tx = (t.clientX / window.innerWidth - 0.5) * 0.8;
+      mouse.ty = -(t.clientY / window.innerHeight - 0.5) * 0.5;
+    };
     window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
 
     // Resize
     const onResize = () => {
@@ -170,6 +177,7 @@ export default function HeroSection3D() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("resize", onResize);
       renderer.dispose();
       if (el.contains(renderer.domElement)) el.removeChild(renderer.domElement);

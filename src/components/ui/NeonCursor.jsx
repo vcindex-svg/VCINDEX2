@@ -78,11 +78,13 @@ export default function NeonCursor() {
 
     // ── Click flash ───────────────────────────────────────────────────────
     const onClick = () => {
-      dot.style.transform += " scale(2.5)";
+      // Use the known position — never append to avoid scale accumulation
+      dot.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px) scale(2.5)`;
       dot.style.opacity = "0.4";
       setTimeout(() => {
+        dot.style.transform = `translate(${mouseX - 4}px, ${mouseY - 4}px)`;
         dot.style.opacity = "1";
-      }, 150);
+      }, 180);
     };
     document.addEventListener("mousedown", onClick);
 

@@ -158,7 +158,7 @@ export default function ParticleBackground() {
     });
     scene.add(cores);
 
-    // ── Mouse parallax ────────────────────────────────────────────────────
+    // ── Mouse / touch parallax ────────────────────────────────────────────
     let targetX = 0;
     let targetY = 0;
 
@@ -166,7 +166,13 @@ export default function ParticleBackground() {
       targetX = (e.clientX / window.innerWidth  - 0.5) * 0.6;
       targetY = (e.clientY / window.innerHeight - 0.5) * 0.4;
     };
+    const onTouchMove = (e) => {
+      const t = e.touches[0];
+      targetX = (t.clientX / window.innerWidth  - 0.5) * 0.6;
+      targetY = (t.clientY / window.innerHeight - 0.5) * 0.4;
+    };
     window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
 
     // ── Resize ────────────────────────────────────────────────────────────
     const onResize = () => {
@@ -198,6 +204,7 @@ export default function ParticleBackground() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("resize", onResize);
       starTex.dispose();
       nebulaTex.dispose();
